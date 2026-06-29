@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   CUSTOM CSS VARIABLES — edit these to re-theme the whole site
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Gold palette */
+  --gold-primary:  #D4AF37;
+  --gold-light:    #E8C547;
+  --gold-dark:     #C9A227;
+  --gold-pale:     #F5E27A;
+  --gold-deep:     #A8852A;
+
+  /* Background palette */
+  --bg-black:      #0a0a0a;
+  --bg-dark:       #111111;
+  --bg-card:       #181818;
+  --bg-card-hover: #1e1e1e;
+
+  /* Typography */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+}
+
+/* ─── Base ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background-color: var(--bg-black);
+  color: #e5e5e5;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── GOLD FOIL TEXT EFFECT ────────────────────────────────────
+   Apply .gold-foil to any element for a shiny, animated metallic
+   gold text effect. Works best on large headings.
+   ─────────────────────────────────────────────────────────── */
+.gold-foil {
+  /* Multi-stop gradient simulating real metallic foil */
+  background: linear-gradient(
+    105deg,
+    var(--gold-deep)  0%,
+    var(--gold-primary) 20%,
+    var(--gold-pale)  38%,
+    var(--gold-light) 45%,
+    var(--gold-pale)  52%,
+    var(--gold-primary) 60%,
+    var(--gold-dark)  75%,
+    var(--gold-primary) 88%,
+    var(--gold-pale)  100%
+  );
+  background-size: 300% auto;
+
+  /* Clip gradient to text */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  /* Layered text shadows create depth / glow behind the clipped text.
+     Because -webkit-text-fill-color is transparent we use
+     filter: drop-shadow instead so it shows around the letters. */
+  filter:
+    drop-shadow(0 0 8px rgba(212, 175, 55, 0.55))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+
+  /* Animate the shine sweep */
+  animation: goldShine 5s linear infinite;
+
+  display: inline-block; /* required for background-clip */
+}
+
+@keyframes goldShine {
+  0%   { background-position: 0%   center; }
+  50%  { background-position: 100% center; }
+  100% { background-position: 0%   center; }
+}
+
+/* Slightly slower, subtler version for smaller elements */
+.gold-foil-sm {
+  composes: gold-foil;
+  animation-duration: 8s;
+  filter:
+    drop-shadow(0 0 4px rgba(212, 175, 55, 0.4))
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* ─── Gold Accent Border ───────────────────────────────────── */
+.gold-border {
+  border: 1px solid rgba(212, 175, 55, 0.35);
+}
+.gold-border-bright {
+  border: 1px solid rgba(212, 175, 55, 0.7);
+}
+
+/* ─── Shimmer Button ───────────────────────────────────────── */
+.gold-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--gold-dark) 0%,
+    var(--gold-primary) 40%,
+    var(--gold-light) 60%,
+    var(--gold-primary) 80%,
+    var(--gold-dark) 100%
+  );
+  background-size: 200% auto;
+  transition: background-position 0.5s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.gold-btn:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 24px rgba(212, 175, 55, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.6);
+}
+.gold-btn:active {
+  transform: translateY(0);
+}
+
+/* Ripple shine overlay */
+.gold-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.25) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.5s ease;
+}
+.gold-btn:hover::after {
+  left: 125%;
+}
+
+/* ─── Section entrance fade-up (used by Framer Motion variants) */
+.section-hidden { opacity: 0; transform: translateY(40px); }
+.section-visible { opacity: 1; transform: translateY(0); }
+
+/* ─── Card glass effect ─────────────────────────────────────── */
+.glass-card {
+  background: rgba(24, 24, 24, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-card:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.08);
+}
+
+/* ─── Divider ───────────────────────────────────────────────── */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(212, 175, 55, 0.6) 30%,
+    rgba(232, 197, 71, 0.9) 50%,
+    rgba(212, 175, 55, 0.6) 70%,
+    transparent
+  );
+}
+
+/* ─── Live status pill ──────────────────────────────────────── */
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+  50%       { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+.live-pulse {
+  animation: livePulse 1.8s ease-in-out infinite;
+}
+
+/* ─── Scrollbar styling ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.4);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.7); }
